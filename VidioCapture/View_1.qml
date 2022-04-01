@@ -45,51 +45,21 @@ Rectangle {
                     font.bold:true
                     wrapMode: Text.WrapAnywhere
                 }
-                GridView {
+                ListView {
                     id:cameraInfoGrid
                     width : parent.width
-                    height: cellHeight * QtMultimedia.availableCameras.length * 4
-                    cellHeight: 20
-                    cellWidth: parent.width
-                    model:QtMultimedia.availableCameras.length * 4
+                    height: 200
+                    spacing:5
+                    model:VideoSourceService.camerasInfo
                     delegate: Item{
-                        width:cameraInfoGrid.cellWidth
-                        height:cameraInfoGrid.cellHeight
+                        width:parent.width
+                        height:50
                         Button {
                             anchors.fill: parent
-                            visible: index%4 === 0
+                            text:"set:"+modelData.description
                             onClicked: {
-                                console.log("onselected QtMultimedia.availableCameras[~~(index/4)].deviceId")
-                                camera.deviceId = QtMultimedia.availableCameras[~~(index/4)].deviceId
+                                VideoSourceService.setCameraDeviceID(modelData.id)
                             }
-                        }
-                        Text {
-                            visible: index%4 === 0
-                            text: "* deviceID:"       + QtMultimedia.availableCameras[~~(index/4)].deviceId
-                            anchors.fill: parent
-                            wrapMode: Text.NoWrap
-                            elide: Text.ElideRight
-                        }
-                        Text {
-                            visible: index%4 === 1
-                            text: "    displayName:"  + QtMultimedia.availableCameras[~~(index/4)].displayName
-                            anchors.fill: parent
-                            wrapMode: Text.NoWrap
-                            elide: Text.ElideRight
-                        }
-                        Text {
-                            visible: index%4 === 2
-                            text: "    position:"     + QtMultimedia.availableCameras[~~(index/4)].position
-                            anchors.fill: parent
-                            wrapMode: Text.NoWrap
-                            elide: Text.ElideRight
-                        }
-                        Text {
-                            visible: index%4 === 3
-                            text: "    orientation:"  + QtMultimedia.availableCameras[~~(index/4)].orientation
-                            anchors.fill: parent
-                            wrapMode: Text.NoWrap
-                            elide: Text.ElideRight
                         }
                     }
                 }
@@ -110,7 +80,6 @@ Rectangle {
 
                 captureMode: Camera.CaptureVideo
                 Component.onCompleted: {
-                    VideoSourceService.setMonitorSource(this)
                 }
             }
 
